@@ -1,0 +1,36 @@
+heat_template_version: 2015-04-30
+
+description: Create a network gateway (in Neutron level)
+
+parameters:
+  networkId:
+    type: string
+  segmentationId:
+    type: number
+  segmentationType:
+    type: string
+  networkName:
+    type: string
+  interfaceAName:
+    type: string
+  deviceAId:
+    type: string
+  interfaceBName:
+    type: string
+  deviceBId:
+    type: string
+
+resources:
+
+  theGateway:
+    type: OS::Neutron::NetworkGateway
+    properties:
+      connections: [{"network_id": { get_param: networkId }, "segmentation_id": { get_param: segmentationId }, "segmentation_type": { get_param: segmentationType }, "network": { get_param: networkName } }]
+      devices: [{"interface_name": { get_param: interfaceAName }, "id": { get_param: deviceAId } }, {"interface_name": { get_param: interfaceBName }, "id": { get_param: deviceBId }}]
+      name: netGateway10
+      
+outputs:
+
+  subnetNeutron:
+    value: { get_resource: theGateway }
+    description: Network Gateway ID

@@ -1,0 +1,56 @@
+heat_template_version: 2015-04-30
+
+description: Create a neutron subnet
+
+parameters:
+  cidrSubnet:
+    type: string
+  dnsNameservers:
+    type: comma_delimited_listmber
+  gatewayIp:
+    type: string
+  addressModeIpv6:
+    type: string
+  raModeIpv6:
+    type: string
+  networkSubnet:
+    type: string
+  subnetPool:
+    type: string
+  segment:
+    type: string
+  tagList:
+    type: comma_delimited_list
+  tenantId:
+    type: string
+  valueSpecs:
+    type: json
+
+resources:
+
+  newSubnet:
+    type: OS::Neutron::Subnet
+    properties:
+      allocation_pools: [{"start": 14.34.25.80, "end": 14.34.25.150}]
+      cidr: { get_pararm: cidrSubnet }
+      dns_nameservers: { get_param: dnsNameservers }
+      enable_dhcp: False
+      gateway_ip: { get_param: gatewayIp }
+      host_routes: [{"nexthop": 5.5.5.2, "destination": 7.7.7.2}]
+      ip_version: 4
+      ipv6_address_mode: { get_param: addressModeIpv6 }
+      ipv6_ra_mode: { get_param: raModeIpv6 }
+      name: subnet1502
+      network: { get_param: networkSubnet }
+      prefixlen: 24
+      segment: { get_param: segment }
+      subnetpool: { get_param: subnetPool }
+      tags: { get_param: tagList }
+      tenant_id: { get_param: tenantId }
+      value_specs: { get_param: valueSpecs }
+      
+outputs:
+
+  subnetNeutron:
+    value: { get_resource: newSubnet }
+    description: Subnet ID

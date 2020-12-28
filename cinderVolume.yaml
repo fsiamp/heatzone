@@ -1,0 +1,46 @@
+heat_template_version: 2015-04-30
+
+description: Create a cinder volume resource
+
+parameters:
+  snapshot:
+    type: string
+    default: j28hy243023hg02348104trh8092345823h2thg0243
+  sourceVolumeId:
+    type: string
+    default: 9235823582308523271239572358ng0239482350235
+  image:
+    type: string
+    default: ubuntu1404
+  volumeType:
+    type: string
+    default: backendType
+  volumeZone:
+    type: string
+    default: zone1
+  backupId:
+    type: string
+    default: testbackup
+
+resources:
+
+  cinderMain:
+    type: OS::Cinder::Volume
+    properties:
+      availability_zone: { get_param: volumeZone }
+      backup_id: { get_param: backupId }
+      description: Test volume creation
+      image: { get_param: image }
+      metadata: { "testMeta" : "testValue" }
+      multiattach: True
+      name: MainVolume
+      read_only: False
+      scheduler_hints: { "ha-policy" : "ha-system" }
+      size: 20
+      snapshot_id: { get_param: backupId }
+      source_volid: { get_param: sourceVolumeId }
+      volume_type: { get_param: volumeType }
+
+
+
+

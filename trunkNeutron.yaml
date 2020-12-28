@@ -1,0 +1,74 @@
+heat_template_version: 2017-02-24
+
+description: How to boot an instance with networks trunked over a port
+
+parameters:
+  flavor:
+    type: string
+    default: ds512M
+  key:
+    type: string
+    default: key0
+  image:
+    type: string
+    default: ubuntu1404
+
+resources:
+
+  net0:
+    type: OS::Neutron::Net
+  net1:
+    type: OS::Neutron::Net
+  net2:
+    type: OS::Neutron::Net
+
+  subnet0:
+    type: OS::Neutron::Subnet
+    properties:
+      network: { get_resource: net0 }
+      cidr: 10.0.4.0/24
+  subnet1:
+    type: OS::Neutron::Subnet
+    properties:
+      network: { get_resource: net1 }
+      cidr: 10.0.5.0/24
+  subnet2:
+    type: OS::Neutron::Subnet
+    properties:
+      network: { get_resource: net2 }
+      cidr: 10.0.6.0/24
+
+  parent_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_resource: net0 }
+  subport1:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_resource: net1 }
+  subport2:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_resource: net2 }
+      #mac_address: { get_attr: [parent_port, mac_address] }
+
+  trunk0:
+    type: OS::Neutron::Trunk
+    properties:
+      port: { get_resource: parent_port }
+      sub_ports:
+        - { port: { get_resource: subport1 },
+          segmentation_type: vlan,
+          segmentation_id: 101 }
+        - { port: { get_resource: subport2 },
+          segmentation_type: vlan,
+          segmentation_id: 102 }
+
+  instance0:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: key }
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      networks:
+        - { port: { get_attr: [trunk0, port_id] } }

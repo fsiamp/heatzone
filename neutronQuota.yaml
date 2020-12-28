@@ -1,0 +1,41 @@
+heat_template_version: 2015-04-30
+
+description: Create a neutron quota
+
+parameters:
+  floatingip:
+    type: number
+  network:
+    type: number
+  port:
+    type: number
+  project:
+    type: string
+  router:
+    type: number
+  securityGroup:
+    type: number
+  securityGroupRule:
+    type: number
+  subnet:
+    type: number
+
+resources:
+
+  newQuota:
+    type: OS::Neutron::Quota
+    properties:
+      floatingip: { get_param: floatingip }
+      network: { get_param: network }
+      port: { get_param: port }
+      project: { get_param: project }
+      router: { get_param: router }
+      security_group: { get_param: securityGroup }
+      security_group_rule: { get_param: securityGroupRule }
+      subnet: { get_param: subnet }
+      
+outputs:
+
+  neutronQuota:
+    value: { get_resource: newQuota }
+    description: Quota ID

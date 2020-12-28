@@ -1,0 +1,48 @@
+heat_template_version: 2015-04-30
+
+description: Create a VM flavor resource
+
+parameters:
+  diskSize:
+    type: number
+  ephemeralSize:
+    type: number
+  extraMeta:
+    type: json
+  flavorId:
+    type: string
+  ramSize:
+    type: number
+  rxTxFactor:
+    type: number
+  publicFlavor:
+    type: boolean
+  swapSize:
+    type: number
+  vcpuSize:
+    type: number
+  tenantList:
+    type: comma_delimited_list
+
+resources:
+
+  vmFlavor:
+    type: OS::Nova::Flavor
+    properties:
+      disk: { get_param: diskSize }
+      ephemeral: { get_param: ephemeralSize }
+      extra_specs: { get_param: extraMeta }
+      flavorid: { get_param: flavorId }
+      is_public: { get_param: publicFlavor }
+      name: cirrosFlavor
+      ram: { get_param: ramSize }
+      rxtx_factor: { get_param: rxTxFactor }
+      swap: { get_param: swapSize }
+      tenants: { get_param: tenantList }
+      vcpus: { get_param: vcpuSize }
+      
+outputs:
+
+  flavorResource:
+    value: { get_resource: vmFlavor }
+    description: Flavor ID
