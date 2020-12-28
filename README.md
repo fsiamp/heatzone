@@ -8,4 +8,4 @@
 </pre>
 <b>Heat Templates for Openstack VNF deployments</b>
 
-![alt tag](https://raw.githubusercontent.com/CloudBomb/heatzone/master/resources/68747470733a2f2f692e706f7374696d672e63632f4251506e337747532f63696e6465722e706e67.png)
+![alt tag](https://raw.githubusercontent.com/fsiamp/heatzone/master/resources/68747470733a2f2f692e706f7374696d672e63632f4251506e337747532f63696e6465722e706e67.png)
